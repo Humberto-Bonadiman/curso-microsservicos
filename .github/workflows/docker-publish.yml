@@ -40,3 +40,14 @@ jobs:
       - name: Docker Compose Build
         working-directory: .
         run: docker-compose build
+
+      - name: Push to Docker Container Registry
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/naming-server:0.0.1-SNAPSHOT ${{ secrets.DOCKER_USERNAME }}/naming-server:${{github_run_id}}
+          docker tag ${{ secrets.DOCKER_USERNAME }}/api-gateway:0.0.1-SNAPSHOT ${{ secrets.DOCKER_USERNAME }}/api-gateway:${{github_run_id}}
+          docker tag ${{ secrets.DOCKER_USERNAME }}/book-service:latest ${{ secrets.DOCKER_USERNAME }}/book-service:${{github_run_id}}
+          docker tag ${{ secrets.DOCKER_USERNAME }}/cambio-service:latest ${{ secrets.DOCKER_USERNAME }}/cambio-service:${{github_run_id}}
+          docker push ${{ secrets.DOCKER_USERNAME }}/naming-server:${{github_run_id}}
+          docker push ${{ secrets.DOCKER_USERNAME }}/api-gateway:${{github_run_id}}
+          docker push ${{ secrets.DOCKER_USERNAME }}/book-service:${{github_run_id}}
+          docker push ${{ secrets.DOCKER_USERNAME }}/cambio-service:${{github_run_id}}
